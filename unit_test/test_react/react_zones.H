@@ -1,5 +1,5 @@
-#ifndef _react_zones_H_
-#define _react_zones_H_
+#ifndef REACT_ZONES_H
+#define REACT_ZONES_H
 
 #include <variables.H>
 #include <network.H>
@@ -9,9 +9,11 @@
 #include <burner.H>
 #include <extern_parameters.H>
 
+using namespace unit_test_rp;
+
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-bool do_react (int i, int j, int k, Array4<Real> const& state,
-               burn_t& burn_state, Array4<int> const& n_rhs, const plot_t& p)
+bool do_react (int i, int j, int k, amrex::Array4<amrex::Real> const& state,
+               burn_t& burn_state, amrex::Array4<int> const& n_rhs, const plot_t& p)
 {
 
     burn_state.rho = state(i, j, k, p.irho);
@@ -32,7 +34,7 @@ bool do_react (int i, int j, int k, Array4<Real> const& state,
     // energy.
     burn_state.e = 0.0_rt;
 
-    Real dt = tmax;
+    amrex::Real dt = tmax;
 
     burn_state.i = i;
     burn_state.j = j;

@@ -19,6 +19,8 @@ using namespace amrex;
 #include <cmath>
 #include <unit_test.H>
 
+using namespace unit_test_rp;
+
 int main (int argc, char* argv[])
 {
     amrex::Initialize(argc, argv);
@@ -104,7 +106,7 @@ void main_main ()
     // time = starting time in the simulation
     Real time = 0.0;
 
-    // How Boxes are distrubuted among MPI processes
+    // How Boxes are distributed among MPI processes
     DistributionMapping dm(ba);
 
     // we allocate our main multifabs
@@ -147,12 +149,11 @@ void main_main ()
 
 
     std::string name = "test_eos.";
-    std::string language = ".cxx";
 
     // Write a plotfile
-    WriteSingleLevelPlotfile(name + eos_name + language, state, names, geom, time, 0);
+    WriteSingleLevelPlotfile(name + eos_name, state, names, geom, time, 0);
 
-    write_job_info(name + eos_name + language);
+    write_job_info(name + eos_name);
 
     // Tell the I/O Processor to write out the "run time"
     amrex::Print() << "Run time = " << stop_time << std::endl;

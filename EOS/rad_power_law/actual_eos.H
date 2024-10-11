@@ -1,5 +1,5 @@
-#ifndef _actual_eos_H_
-#define _actual_eos_H_
+#ifndef ACTUAL_EOS_H
+#define ACTUAL_EOS_H
 
 // This is an artificial equation of state used primarily for radiation tests.
 //
@@ -24,11 +24,11 @@ inline
 void actual_eos_init ()
 {
 
-    if (eos_const_c_v <= 0.e0_rt) {
+    if (eos_rp::eos_const_c_v <= 0.e0_rt) {
         amrex::Error("eos_const_c_v must be > 0");
     }
 
-    if (eos_c_v_exp_n == 1.0e0_rt) {
+    if (eos_rp::eos_c_v_exp_n == 1.0e0_rt) {
         amrex::Error("eos_c_v_exp_n == 1 is unsupported");
     }
 
@@ -47,7 +47,7 @@ template <typename I>
 AMREX_GPU_HOST_DEVICE AMREX_INLINE
 bool is_input_valid (I input)
 {
-  static_assert(std::is_same<I, eos_input_t>::value, "input must be an eos_input_t");
+  static_assert(std::is_same_v<I, eos_input_t>, "input must be an eos_input_t");
 
   bool valid = true;
 
@@ -68,15 +68,15 @@ template <typename I, typename T>
 AMREX_GPU_HOST_DEVICE AMREX_INLINE
 void actual_eos (I input, T& state)
 {
-    static_assert(std::is_same<I, eos_input_t>::value, "input must be an eos_input_t");
+    static_assert(std::is_same_v<I, eos_input_t>, "input must be an eos_input_t");
 
     switch (input) {
 
     case eos_input_rt:
 
         if constexpr (has_energy<T>::value) {
-            state.cv = eos_const_c_v * std::pow(state.rho, eos_c_v_exp_m) * std::pow(state.T, -eos_c_v_exp_n);
-            state.e  = eos_const_c_v * std::pow(state.rho, eos_c_v_exp_m) * std::pow(state.T, 1 - eos_c_v_exp_n) / (1 - eos_c_v_exp_n);
+            state.cv = eos_rp::eos_const_c_v * std::pow(state.rho, eos_rp::eos_c_v_exp_m) * std::pow(state.T, -eos_rp::eos_c_v_exp_n);
+            state.e  = eos_rp::eos_const_c_v * std::pow(state.rho, eos_rp::eos_c_v_exp_m) * std::pow(state.T, 1 - eos_rp::eos_c_v_exp_n) / (1 - eos_rp::eos_c_v_exp_n);
         }
 
         break;
@@ -84,8 +84,8 @@ void actual_eos (I input, T& state)
     case eos_input_re:
 
         if constexpr (has_energy<T>::value) {
-            state.T  = std::pow((1 - eos_c_v_exp_n) * state.e * std::pow(state.rho, -eos_c_v_exp_m) / eos_const_c_v, 1.0_rt / (1.0_rt - eos_c_v_exp_n));
-            state.cv = eos_const_c_v * std::pow(state.rho, eos_c_v_exp_m) * std::pow(state.T, -eos_c_v_exp_n);
+            state.T  = std::pow((1 - eos_rp::eos_c_v_exp_n) * state.e * std::pow(state.rho, -eos_rp::eos_c_v_exp_m) / eos_rp::eos_const_c_v, 1.0_rt / (1.0_rt - eos_rp::eos_c_v_exp_n));
+            state.cv = eos_rp::eos_const_c_v * std::pow(state.rho, eos_rp::eos_c_v_exp_m) * std::pow(state.T, -eos_rp::eos_c_v_exp_n);
         }
 
         break;

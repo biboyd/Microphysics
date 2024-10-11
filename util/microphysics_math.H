@@ -1,9 +1,8 @@
-#ifndef _microphysics_math_H
-#define _microphysics_math_H
+#ifndef MICROPHYSICS_MATH_H
+#define MICROPHYSICS_MATH_H
 
 #include <AMReX.H>
 #include <AMReX_REAL.H>
-#include <esum.H>
 
 // Override definitions of constants in GCEM to work around lack of support
 // on Power9 for long double. We don't use arithmetic > 64 bit anyway.

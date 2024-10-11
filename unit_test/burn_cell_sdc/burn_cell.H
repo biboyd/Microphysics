@@ -9,10 +9,13 @@
 #include <iostream>
 #include <react_util.H>
 
+using namespace unit_test_rp;
+
+AMREX_INLINE
 void burn_cell_c()
 {
 
-    Real massfractions[NumSpec] = {-1.0};
+    amrex::Real massfractions[NumSpec] = {-1.0};
 
     // Make sure user set all the mass fractions to values in the interval [0, 1]
     for (int n = 1; n <= NumSpec; ++n) {
@@ -27,7 +30,7 @@ void burn_cell_c()
 
 
 #ifdef AUX_THERMO
-    Real auxdata[NumAux] = {-1.0};
+    amrex::Real auxdata[NumAux] = {-1.0};
 
     // Make sure user set all the mass fractions to values in the interval [0, 1]
     for (int n = 1; n <= NumAux; ++n) {
@@ -42,14 +45,15 @@ void burn_cell_c()
         case 3:
             auxdata[n-1] = Aux3;
             break;
-
+        default:
+            amrex::Error("invalid aux");
         }
 
     }
 #endif
 
 
-    Real adv_species[NumSpec] = {0.0};
+    amrex::Real adv_species[NumSpec] = {0.0};
 
     // Make sure user set all the mass fractions to values in the interval [0, 1]
     for (int n = 1; n <= NumSpec; ++n) {
@@ -160,14 +164,15 @@ void burn_cell_c()
         case 35:
             adv_species[n-1] = Adv_X35;
             break;
-
+        default:
+            amrex::Error("invalid species");
         }
 
     }
 
 
 #ifdef AUX_THERMO
-    Real adv_aux[NumAux] = {0.0};
+    amrex::Real adv_aux[NumAux] = {0.0};
 
     // Make sure user set all the mass fractions to values in the interval [0, 1]
     for (int n = 1; n <= NumAux; ++n) {
@@ -182,7 +187,8 @@ void burn_cell_c()
         case 3:
             adv_aux[n-1] = Adv_Aux3;
             break;
-
+        default:
+            amrex::Error("invalid aux component");
         }
 
     }
@@ -206,7 +212,7 @@ void burn_cell_c()
 
     burn_t burn_state;
 
-    eos_t eos_state;
+    eos_extra_t eos_state;
     eos_state.rho = density;
     eos_state.T = temperature;
 
@@ -241,7 +247,6 @@ void burn_cell_c()
     }
 #endif
 
-#if defined(SDC_EVOLVE_ENERGY)
     burn_state.y[SRHO] = density;
 
     burn_state.y[SMX] = 0.0;
@@ -250,18 +255,6 @@ void burn_cell_c()
 
     burn_state.y[SEINT] = rhoe;
     burn_state.y[SEDEN] = burn_state.y[SEINT];
-
-#elif defined(SDC_EVOLVE_ENTHALPY)
-    burn_state.y[SENTH] = burn_state.rho * eos_state.h;
-
-    burn_state.p0 = eos_state.p;
-#endif
-
-#if defined(SDC_EVOLVE_ENERGY)
-    Real rhoe_old = burn_state.y[SEINT];
-#elif defined (SDC_EVOLVE_ENTHALPY)
-    Real rhoh_old = burn_state.y[SENTH];
-#endif
 
     // now initialize the advective terms -- the only ones that are
     // actually used during the integration are for rho, (rho X), and
@@ -280,7 +273,7 @@ void burn_cell_c()
     }
 #endif
 
-    // these need to be initialized 
+    // these need to be initialized
 
     burn_state.sdc_iter = 1;
     burn_state.num_sdc_iters = 1;
@@ -304,10 +297,11 @@ void burn_cell_c()
 
     burn_state.T_fixed = -1.0;
 
-
-    // output initial burn type data
-    Real time = 0.0_rt;
-
+#ifdef NSE_NET
+    burn_state.mu_p = unit_test_rp::mu_p;
+    burn_state.mu_n = unit_test_rp::mu_n;
+    burn_state.y_e = -1.0;
+#endif
 
     std::ofstream state_over_time("state_over_time.txt");
 
@@ -321,17 +315,12 @@ void burn_cell_c()
             tfirst = tmax / nsteps;
         }
     }
-    Real dlogt = 0.0_rt;
+    amrex::Real dlogt = 0.0_rt;
     if (nsteps == 1) {
         dlogt = (std::log10(tmax) - std::log10(tfirst));
     } else {
         dlogt = (std::log10(tmax) - std::log10(tfirst)) / (nsteps - 1);
     }
-
-    // save the initial state -- we'll use this to determine
-    // how much things changed over the entire burn
-
-    burn_t state_in = burn_state;
 
     // output the data in columns, one line per timestep
 
@@ -339,26 +328,21 @@ void burn_cell_c()
     state_over_time << std::setw(12) << "Density";
     state_over_time << std::setw(12) << "Temperature";
     for(int x = 0; x < NumSpec; ++x){
-	std::string element = short_spec_names_cxx[x];
-	state_over_time << std::setw(12) << element; 
+        const std::string& element = short_spec_names_cxx[x];
+        state_over_time << std::setw(12) << element;
     }
     state_over_time << std::endl;
 
-    Real t = 0.0;
+    amrex::Real t = 0.0;
 
     state_over_time << std::setw(10) << t;
-    state_over_time << std::setw(12) << burn_state.rho; 
-    state_over_time << std::setw(12) << burn_state.T; 
-    for (int x = 0; x < NumSpec; ++x){
-        state_over_time << std::setw(12) << burn_state.xn[x]; 
+    state_over_time << std::setw(12) << burn_state.rho;
+    state_over_time << std::setw(12) << burn_state.T;
+    for (auto X : burn_state.xn) {
+        state_over_time << std::setw(12) << X;
     }
     state_over_time << std::endl;
 
-
-    // store the initial internal energy -- we'll update this after
-    // each substep
-
-    Real energy_initial = burn_state.e;
 
     // loop over steps, burn, and output the current state
 
@@ -370,24 +354,31 @@ void burn_cell_c()
 
         // compute the time we wish to integrate to
 
-        Real tend = std::pow(10.0_rt, std::log10(tfirst) + dlogt * n);
-        Real dt = tend - t;
+        amrex::Real tend = std::pow(10.0_rt, std::log10(tfirst) + dlogt * n);
+        amrex::Real dt = tend - t;
+
+        // if we start out in NSE, then the burner will never reset
+        // these counters, so explicitly zero them here
+
+        burn_state.n_step = 0;
+        burn_state.n_rhs = 0;
+        burn_state.n_jac = 0;
 
         std::cout << "burning for dt = " << dt << std::endl;
 
-    	burner(burn_state, dt);
+        burner(burn_state, dt);
 
         nstep_int += burn_state.n_step;
 
         t += dt;
 
-	state_over_time << std::setw(10) << t;
-	state_over_time << std::setw(12) << burn_state.rho;
-	state_over_time << std::setw(12) << burn_state.T;
-	for (int x = 0; x < NumSpec; ++x){
-	     state_over_time << std::setw(12) << burn_state.y[SFS+x] / burn_state.rho; 
-	}
-	state_over_time << std::endl;
+        state_over_time << std::setw(10) << t;
+        state_over_time << std::setw(12) << burn_state.rho;
+        state_over_time << std::setw(12) << burn_state.T;
+        for (int x = 0; x < NumSpec; ++x){
+             state_over_time << std::setw(12) << burn_state.y[SFS+x] / burn_state.rho;
+        }
+        state_over_time << std::endl;
     }
     state_over_time.close();
 

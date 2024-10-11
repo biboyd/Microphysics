@@ -1,8 +1,9 @@
+import argparse
+import os
 import subprocess
 import sys
-import argparse
 from contextlib import contextmanager
-import os
+
 
 @contextmanager
 def cd(newdir):
@@ -27,17 +28,17 @@ def find_files(SHAs=None):
     if stderr is not None:
         raise Exception('git diff encountered an error')
 
-    files = [f for f in stdout.decode('utf-8').strip().split('\n') 
+    files = [f for f in stdout.decode('utf-8').strip().split('\n')
              if f.startswith('networks/')]
     print(files)
 
     # see which directories contain changed files
     changed_networks = set()
     for f in files:
-        # check for the NETWORK_PROPERTIES file in each parent directory
+        # check for the actual_network.H file in each parent directory
         parts = f.split('/')
         while parts:
-            if os.path.exists(os.path.join(*parts, 'NETWORK_PROPERTIES')):
+            if os.path.exists(os.path.join(*parts, 'actual_network.H')):
                 # remove networks/
                 changed_networks.add(os.path.join(*parts[1:]))
                 break
@@ -52,10 +53,6 @@ def run(SHAs=None, make_options=''):
 
     if len(networks) == 0:
         networks = ['aprox13']
-
-    # primordial_chem times out in the github actions
-    if "primordial_chem" in networks:
-        networks.remove("primordial_chem")
 
     GITHUB_WORKSPACE = os.environ.get('GITHUB_WORKSPACE')
 
@@ -100,7 +97,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-make-options',
-                        default='-j 2',
+                        default='-j 4',
                         help='make options')
     parser.add_argument('SHAs', nargs='*', default=None,
                         help='SHAs to be compared')

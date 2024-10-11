@@ -10,10 +10,13 @@
 #include <iomanip>
 #include <react_util.H>
 
+using namespace unit_test_rp;
+
+AMREX_INLINE
 void burn_cell_c()
 {
 
-    Real massfractions[NumSpec] = {-1.0};
+    amrex::Real massfractions[NumSpec] = {-1.0};
 
     // Make sure user set all the mass fractions to values in the interval [0, 1]
     for (int n = 1; n <= NumSpec; ++n) {
@@ -64,6 +67,7 @@ void burn_cell_c()
     burn_state.j = 0;
     burn_state.k = 0;
     burn_state.T_fixed = -1.0_rt;
+    burn_state.time = 0.0;
 
     // normalize -- just in case
 
@@ -79,18 +83,16 @@ void burn_cell_c()
 
     // output just the instantaneous RHS
 
-    Array1D<Real, 1, neqs> ydot;
+    amrex::Array1D<amrex::Real, 1, neqs> ydot;
     actual_rhs(burn_state, ydot);
 
     std::cout << "RHS at t = 0" << std::endl;
     for(int n = 0; n < NumSpec; ++n){
-        std::string element = short_spec_names_cxx[n];
+        const std::string& element = short_spec_names_cxx[n];
         std::cout << std::setw(6) << element << " " << ydot(n+1) << std::endl;
     }
 
     // output initial burn type data
-    Real time = 0.0_rt;
-
     std::ofstream state_over_time("state_over_time.txt");
 
     // we will divide the total integration time into nsteps that are
@@ -103,7 +105,7 @@ void burn_cell_c()
             tfirst = tmax / nsteps;
         }
     }
-    Real dlogt = 0.0_rt;
+    amrex::Real dlogt = 0.0_rt;
     if (nsteps == 1) {
         dlogt = (std::log10(tmax) - std::log10(tfirst));
     } else {
@@ -121,18 +123,18 @@ void burn_cell_c()
     state_over_time << std::setw(25) << "# Time";
     state_over_time << std::setw(25) << "Temperature";
     for(int x = 0; x < NumSpec; ++x){
-        std::string element = short_spec_names_cxx[x];
-	state_over_time << std::setw(25) << element;
+        const std::string& element = short_spec_names_cxx[x];
+        state_over_time << std::setw(25) << element;
     }
     state_over_time << std::endl;
     state_over_time << std::setprecision(15);
 
-    Real t = 0.0;
+    amrex::Real t = 0.0;
 
     state_over_time << std::setw(25) << t;
     state_over_time << std::setw(25) << burn_state.T;
-    for (int x = 0; x < NumSpec; ++x){
-        state_over_time << std::setw(25) << burn_state.xn[x];
+    for (double X : burn_state.xn) {
+        state_over_time << std::setw(25) << X;
     }
     state_over_time << std::endl;
 
@@ -140,7 +142,7 @@ void burn_cell_c()
     // store the initial internal energy -- we'll update this after
     // each substep
 
-    Real energy_initial = burn_state.e;
+    amrex::Real energy_initial = burn_state.e;
 
     // loop over steps, burn, and output the current state
 
@@ -150,10 +152,14 @@ void burn_cell_c()
 
         // compute the time we wish to integrate to
 
-        Real tend = std::pow(10.0_rt, std::log10(tfirst) + dlogt * n);
-        Real dt = tend - t;
+        amrex::Real tend = std::pow(10.0_rt, std::log10(tfirst) + dlogt * n);
+        amrex::Real dt = tend - t;
 
-    	burner(burn_state, dt);
+        burner(burn_state, dt);
+
+        if (! burn_state.success) {
+            amrex::Error("integration failed");
+        }
 
         nstep_int += burn_state.n_step;
 
@@ -168,18 +174,18 @@ void burn_cell_c()
 
         // get the updated T
 
-        if (call_eos_in_rhs) {
+        if (integrator_rp::call_eos_in_rhs) {
             eos(eos_input_re, burn_state);
         }
 
         t += dt;
 
-	state_over_time << std::setw(25) << t;
-	state_over_time << std::setw(25) << burn_state.T;
-	for (int x = 0; x < NumSpec; ++x){
-	     state_over_time << std::setw(25) << burn_state.xn[x];
-	}
-	state_over_time << std::endl;
+        state_over_time << std::setw(25) << t;
+        state_over_time << std::setw(25) << burn_state.T;
+        for (double X : burn_state.xn) {
+             state_over_time << std::setw(25) << X;
+        }
+        state_over_time << std::endl;
     }
     state_over_time.close();
 
@@ -200,7 +206,7 @@ void burn_cell_c()
     std::cout << "------------------------------------" << std::endl;
     std::cout << "new mass fractions: " << std::endl;
     for (int n = 0; n < NumSpec; ++n) {
-        std::string element = short_spec_names_cxx[n];
+        const std::string& element = short_spec_names_cxx[n];
         std::cout << element << " " << burn_state.xn[n] << std::endl;
     }
 

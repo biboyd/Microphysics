@@ -12,19 +12,17 @@
 #include <AMReX_GpuUtility.H>
 
 template<int neqs, typename T>
+AMREX_GPU_HOST_DEVICE AMREX_INLINE
 void hybrj(hybrj_t<neqs>& hj,
-           const T& data,
-           std::function<void(amrex::Array1D<Real, 1, neqs>&,
-                              amrex::Array1D<Real, 1, neqs>&,
-                              const T&, int&)> fcn,
-           std::function<void(amrex::Array1D<Real, 1, neqs>&,
-                              amrex::Array2D<Real, 1, neqs, 1, neqs>&,
-                              const T&, int&)> jcn) {
+           const T& data) {
 
     // the purpose of hybrj is to find a zero of a system of
     // n nonlinear functions in n variables by a modification
     // of the powell hybrid method. the user must provide a
     // subroutine which calculates the functions and the jacobian.
+    //
+    // We require fcn and jcn to be defined in the other header file
+    // where we include this header.
     //
     // fcn jcn are the names of the user-supplied subroutine which
     // calculates the functions and the jacobian.
@@ -38,15 +36,15 @@ void hybrj(hybrj_t<neqs>& hj,
 
     bool finished = false;
 
-    Real epsmch = std::numeric_limits<Real>::epsilon();
+    amrex::Real epsmch = std::numeric_limits<amrex::Real>::epsilon();
 
     hj.info = 0;
     int iflag = 0;
     hj.nfev = 0;
     hj.njev = 0;
 
-    Real delta = 0.0_rt;
-    Real xnorm = 0.0_rt;
+    amrex::Real delta = 0.0_rt;
+    amrex::Real xnorm = 0.0_rt;
 
     // check the input parameters for errors.
 
@@ -65,7 +63,7 @@ void hybrj(hybrj_t<neqs>& hj,
 
     // evaluate the function at the starting point
     // and calculate its norm.
-    Real fnorm = 0.0_rt;
+    amrex::Real fnorm = 0.0_rt;
 
     iflag = 1;
 
@@ -110,7 +108,7 @@ void hybrj(hybrj_t<neqs>& hj,
 
         if (iter == 1) {
             if (hj.mode != 2) {
-                for (int j = 1; j <= hj.n; ++j) {
+                for (int j = 1; j <= neqs; ++j) {
                     hj.diag(j) = hj.wa2(j);
                     if (hj.wa2(j) == 0.0_rt) {
                         hj.diag(j) = 1.0_rt;
@@ -124,7 +122,7 @@ void hybrj(hybrj_t<neqs>& hj,
             for (int j = 1; j <= neqs; ++j) {
                 hj.wa3(j) = hj.diag(j) * hj.x(j);
             }
-            xnorm = enorm(hj.n, hj.wa3);
+            xnorm = enorm(neqs, hj.wa3);
             delta =  factor * xnorm;
             if (delta == 0.0_rt) {
                 delta = factor;
@@ -133,17 +131,17 @@ void hybrj(hybrj_t<neqs>& hj,
 
         // form (q transpose)*fvec and store in qtf.
 
-        for (int i = 1; i <= hj.n; ++i) {
+        for (int i = 1; i <= neqs; ++i) {
             hj.qtf(i) = hj.fvec(i);
         }
         for (int j = 1; j <= neqs; ++j) {
             if (hj.fjac(j,j) != 0.0_rt) {
-                Real sum = 0.0_rt;
-                for (int i = j; i <= hj.n; ++i) {
+                amrex::Real sum = 0.0_rt;
+                for (int i = j; i <= neqs; ++i) {
                     sum += hj.fjac(i,j) * hj.qtf(i);
                 }
-                Real temp = -sum / hj.fjac(j,j);
-                for (int i = j; i <= hj.n; ++i) {
+                amrex::Real temp = -sum / hj.fjac(j,j);
+                for (int i = j; i <= neqs; ++i) {
                     hj.qtf(i) += hj.fjac(i,j) * temp;
                 }
             }
@@ -153,7 +151,7 @@ void hybrj(hybrj_t<neqs>& hj,
 
         bool sing = false;
 
-        for (int j = 1; j <= hj.n; ++j) {
+        for (int j = 1; j <= neqs; ++j) {
             int l = j;
             int jm1 = j - 1;
             if (jm1 >= 1) {
@@ -175,7 +173,7 @@ void hybrj(hybrj_t<neqs>& hj,
         // rescale if necessary.
 
         if (hj.mode != 2) {
-            for (int j = 1; j <= hj.n; ++j) {
+            for (int j = 1; j <= neqs; ++j) {
                 hj.diag(j) = amrex::max(hj.diag(j), hj.wa2(j));
             }
         }
@@ -190,18 +188,18 @@ void hybrj(hybrj_t<neqs>& hj,
 
             // store the direction p and x + p. calculate the norm of p.
 
-	    bool invalid = false;
+            bool invalid = false;
 
-	    for (int i = 1; i < neqs; ++i) {
-	      if ( amrex::isinf(hj.wa1(i)) || amrex::isnan(hj.wa1(i)) ){
-		invalid = true;
-	      }
-	    }
+            for (int i = 1; i < neqs; ++i) {
+              if ( amrex::isinf(hj.wa1(i)) || amrex::isnan(hj.wa1(i)) ){
+                invalid = true;
+              }
+            }
 
-	    if (invalid) {
-	      finished = true;
-	      break;
-	    }
+            if (invalid) {
+              finished = true;
+              break;
+            }
 
             for (int j = 1; j <= neqs; ++j) {
                 hj.wa1(j) = -hj.wa1(j);
@@ -209,7 +207,7 @@ void hybrj(hybrj_t<neqs>& hj,
                 hj.wa3(j) = hj.diag(j) * hj.wa1(j);
             }
 
-            Real pnorm = enorm(hj.n, hj.wa3);
+            amrex::Real pnorm = enorm(neqs, hj.wa3);
 
             // on the first iteration, adjust the initial step bound.
 
@@ -227,36 +225,36 @@ void hybrj(hybrj_t<neqs>& hj,
                 break;
             }
 
-            Real fnorm1 = enorm(hj.n, hj.wa4);
+            amrex::Real fnorm1 = enorm(neqs, hj.wa4);
 
             // compute the scaled actual reduction.
 
-            Real actred = -1.0_rt;
+            amrex::Real actred = -1.0_rt;
             if (fnorm1 < fnorm) {
-                actred = 1.0_rt - std::pow(fnorm1/fnorm, 2.0_rt);
+                actred = 1.0_rt - amrex::Math::powi<2>(fnorm1/fnorm);
             }
 
             // compute the scaled predicted reduction.
 
             int l = 1;
-            for (int i = 1; i <= hj.n; ++i) {
-                Real sum = 0.0_rt;
+            for (int i = 1; i <= neqs; ++i) {
+                amrex::Real sum = 0.0_rt;
                 for (int j = i; j <= neqs; ++j) {
                     sum += hj.r(l) * hj.wa1(j);
                     l += 1;
                 }
                 hj.wa3(i) = hj.qtf(i) + sum;
             }
-            Real temp = enorm(hj.n, hj.wa3);
-            Real prered = 0.0_rt;
+            amrex::Real temp = enorm(neqs, hj.wa3);
+            amrex::Real prered = 0.0_rt;
             if (temp < fnorm) {
-                prered = 1.0_rt - std::pow(temp/fnorm, 2.0_rt);
+                prered = 1.0_rt - amrex::Math::powi<2>(temp/fnorm);
             }
 
             // compute the ratio of the actual to the predicted
             // reduction.
 
-            Real ratio = 0.0_rt;
+            amrex::Real ratio = 0.0_rt;
             if (prered > 0.0_rt) {
                 ratio = actred / prered;
             }
@@ -284,13 +282,13 @@ void hybrj(hybrj_t<neqs>& hj,
 
                 // successful iteration. update x, fvec, and their norms.
 
-                for (int j = 1; j <= hj.n; ++j) {
+                for (int j = 1; j <= neqs; ++j) {
                     hj.x(j) = hj.wa2(j);
                     hj.wa2(j) = hj.diag(j) * hj.x(j);
                     hj.fvec(j) = hj.wa4(j);
                 }
 
-                xnorm = enorm(hj.n, hj.wa2);
+                xnorm = enorm(neqs, hj.wa2);
                 fnorm = fnorm1;
                 iter++;
             }
@@ -346,13 +344,13 @@ void hybrj(hybrj_t<neqs>& hj,
 
             // calculate the rank one modification to the jacobian
             // and update qtf if necessary.
-	    if (pnorm == 0.0_rt) {
-	      break;
-	    }
+            if (pnorm == 0.0_rt) {
+              break;
+            }
 
-            for (int j = 1; j <= hj.n; ++j) {
-                Real sum = 0.0_rt;
-                for (int i = 1; i <= hj.n; ++i) {
+            for (int j = 1; j <= neqs; ++j) {
+                amrex::Real sum = 0.0_rt;
+                for (int i = 1; i <= neqs; ++i) {
                     sum += hj.fjac(i,j) * hj.wa4(i);
                 }
                 hj.wa2(j) = (sum - hj.wa3(j)) / pnorm;

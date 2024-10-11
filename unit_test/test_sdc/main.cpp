@@ -102,7 +102,7 @@ void main_main ()
 
     init_unit_test();
 
-    // C++ EOS initialization (must be done after Fortran eos_init and init_extern_parameters)
+    // C++ EOS initialization (must be done after init_extern_parameters)
     eos_init(small_temp, small_dens);
 
     // C++ Network, RHS, screening, rates initialization
@@ -117,7 +117,7 @@ void main_main ()
     // time = starting time in the simulation
     Real time = 0.0;
 
-    // How Boxes are distrubuted among MPI processes
+    // How Boxes are distributed among MPI processes
     DistributionMapping dm(ba);
 
     // we allocate our main multifabs
@@ -161,9 +161,9 @@ void main_main ()
                     amrex::max(xn[n], 1.e-10_rt);
             }
 
-            // initialize the auxillary state (in particular, for NSE)
+            // initialize the auxiliary state (in particular, for NSE)
 #ifdef AUX_THERMO
-            eos_t eos_state;
+            eos_extra_t eos_state;
             for (int n = 0; n < NumSpec; n++) {
                 eos_state.xn[n] = xn[n];
             }
@@ -211,6 +211,10 @@ void main_main ()
     aa_num_failed.copyToHost(&num_failed, 1);
     Gpu::synchronize();
 
+    if (num_failed > 0) {
+        amrex::Abort("Integration failed");
+    }
+
     // Call the timer again and compute the maximum difference between
     // the start time and stop time over all processors
     Real stop_time = ParallelDescriptor::second() - strt_time;
@@ -237,12 +241,10 @@ void main_main ()
     std::string name = "test_react.";
     std::string integrator = buildInfoGetModuleVal(int_idx);
 
-    std::string language = ".cxx";
-
     // Write a plotfile
-    WriteSingleLevelPlotfile(prefix + name + integrator + language, state, names, geom, time, 0);
+    WriteSingleLevelPlotfile(prefix + name + integrator, state, names, geom, time, 0);
 
-    write_job_info(prefix + name + integrator + language);
+    write_job_info(prefix + name + integrator);
 
     // Tell the I/O Processor to write out the "run time"
     amrex::Print() << "Run time = " << stop_time << std::endl;

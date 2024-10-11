@@ -1,12 +1,11 @@
-
-#ifndef _eos_composition_H_
-#define _eos_composition_H_
+#ifndef EOS_COMPOSITION_H
+#define EOS_COMPOSITION_H
 
 #include <AMReX_BLFort.H>
 #include <network.H>
 #include <eos_type.H>
 
-using namespace amrex;
+using namespace amrex::literals;
 
 struct eos_xderivs_t {
   Real dedX[NumSpec];
@@ -45,7 +44,6 @@ void subroutine (T& state)
 
 // Compute thermodynamic derivatives with respect to xn(:)
 
-#ifdef EXTRA_THERMO
 template <typename T>
 AMREX_GPU_HOST_DEVICE AMREX_INLINE
 eos_x_derivs_t composition_derivatives (const T& state)
@@ -66,6 +64,5 @@ eos_x_derivs_t composition_derivatives (const T& state)
 
     return state_xderivs;
 }
-#endif
 
 #endif

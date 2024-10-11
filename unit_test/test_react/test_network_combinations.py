@@ -135,7 +135,7 @@ def doit():
         except:
             sys.exit("unable to create directory")
 
-        # copy the executable and suport files
+        # copy the executable and support files
 
         for f in link_files:
             try:
@@ -192,7 +192,7 @@ def doit():
     for k, v in sorted(outcomes.items()):
         print("{}: {}".format(k, v))
 
-        
+
 
 if __name__ == "__main__":
     doit()

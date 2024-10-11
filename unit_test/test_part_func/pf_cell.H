@@ -1,3 +1,5 @@
+#ifndef PF_CELL_H
+#define PF_CELL_H
 
 #include <extern_parameters.H>
 #include <eos.H>
@@ -9,11 +11,14 @@
 #include <reaclib_rates.H>
 #include <partition_functions.H>
 
+using namespace unit_test_rp;
+
+AMREX_INLINE
 void pf_cell_c()
 {
 
-    Real pf;
-    Real dpf_dT;
+    amrex::Real pf;
+    amrex::Real dpf_dT;
 
     std::cout << "temperature = " << temperature << std::endl;
 
@@ -30,3 +35,4 @@ void pf_cell_c()
     std::cout << "spins: " << get_spin_state(H1) << " " << get_spin_state(He4) << " " << get_spin_state(Fe52) << " " << get_spin_state(Co55) << " " << get_spin_state(Ni56) << std::endl;
 
 }
+#endif

@@ -1,5 +1,5 @@
-#ifndef _actual_eos_H_
-#define _actual_eos_H_
+#ifndef ACTUAL_EOS_H
+#define ACTUAL_EOS_H
 
 // This is a mult-gamma EOS for primordial ISM chemistry.
 // Each species can have its own gamma, but
@@ -21,94 +21,94 @@ void actual_eos_init ()
     // Set the gammas & masses for the species
 
     for (int n = 0; n < NumSpec; ++n) {
-        gammas[n] = eos_gamma_default;
+        gammas[n] = eos_rp::eos_gamma_default;
         spmasses[n] = 1.67353251819e-24;
     }
 
     int idx;
 
-    idx = network_spec_index(species_a_name);
+    idx = network_spec_index(eos_rp::species_a_name);
     if (idx >= 0) {
-        gammas[idx] = species_a_gamma;
-        spmasses[idx] = species_a_mass;
+        gammas[idx] = eos_rp::species_a_gamma;
+        spmasses[idx] = eos_rp::species_a_mass;
     }
 
-    idx = network_spec_index(species_b_name);
+    idx = network_spec_index(eos_rp::species_b_name);
     if (idx >= 0) {
-        gammas[idx] = species_b_gamma;
-        spmasses[idx] = species_b_mass;
+        gammas[idx] = eos_rp::species_b_gamma;
+        spmasses[idx] = eos_rp::species_b_mass;
    }
 
-    idx = network_spec_index(species_c_name);
+    idx = network_spec_index(eos_rp::species_c_name);
     if (idx >= 0) {
-        gammas[idx] = species_c_gamma;
-        spmasses[idx] = species_c_mass;
+        gammas[idx] = eos_rp::species_c_gamma;
+        spmasses[idx] = eos_rp::species_c_mass;
     }
 
-    idx = network_spec_index(species_d_name);
+    idx = network_spec_index(eos_rp::species_d_name);
     if (idx >= 0) {
-        gammas[idx] = species_d_gamma;
-        spmasses[idx] = species_d_mass;
+        gammas[idx] = eos_rp::species_d_gamma;
+        spmasses[idx] = eos_rp::species_d_mass;
     }
 
-    idx = network_spec_index(species_e_name);
+    idx = network_spec_index(eos_rp::species_e_name);
     if (idx >= 0) {
-        gammas[idx] = species_e_gamma;
-        spmasses[idx] = species_e_mass;
+        gammas[idx] = eos_rp::species_e_gamma;
+        spmasses[idx] = eos_rp::species_e_mass;
     }
 
-    idx = network_spec_index(species_f_name);
+    idx = network_spec_index(eos_rp::species_f_name);
     if (idx >= 0) {
-        gammas[idx] = species_f_gamma;
-        spmasses[idx] = species_f_mass;
+        gammas[idx] = eos_rp::species_f_gamma;
+        spmasses[idx] = eos_rp::species_f_mass;
     }
 
-    idx = network_spec_index(species_g_name);
+    idx = network_spec_index(eos_rp::species_g_name);
     if (idx >= 0) {
-        gammas[idx] = species_g_gamma;
-        spmasses[idx] = species_g_mass;
+        gammas[idx] = eos_rp::species_g_gamma;
+        spmasses[idx] = eos_rp::species_g_mass;
     }
 
-    idx = network_spec_index(species_h_name);
+    idx = network_spec_index(eos_rp::species_h_name);
     if (idx >= 0) {
-        gammas[idx] = species_h_gamma;
-        spmasses[idx] = species_h_mass;
+        gammas[idx] = eos_rp::species_h_gamma;
+        spmasses[idx] = eos_rp::species_h_mass;
     }
 
-    idx = network_spec_index(species_i_name);
+    idx = network_spec_index(eos_rp::species_i_name);
     if (idx >= 0) {
-        gammas[idx] = species_i_gamma;
-        spmasses[idx] = species_i_mass;
+        gammas[idx] = eos_rp::species_i_gamma;
+        spmasses[idx] = eos_rp::species_i_mass;
     }
 
-    idx = network_spec_index(species_j_name);
+    idx = network_spec_index(eos_rp::species_j_name);
     if (idx >= 0) {
-        gammas[idx] = species_j_gamma;
-        spmasses[idx] = species_j_mass;
+        gammas[idx] = eos_rp::species_j_gamma;
+        spmasses[idx] = eos_rp::species_j_mass;
     }
 
-    idx = network_spec_index(species_k_name);
+    idx = network_spec_index(eos_rp::species_k_name);
     if (idx >= 0) {
-        gammas[idx] = species_k_gamma;
-        spmasses[idx] = species_k_mass;
+        gammas[idx] = eos_rp::species_k_gamma;
+        spmasses[idx] = eos_rp::species_k_mass;
     }
 
-    idx = network_spec_index(species_l_name);
+    idx = network_spec_index(eos_rp::species_l_name);
     if (idx >= 0) {
-        gammas[idx] = species_l_gamma;
-        spmasses[idx] = species_l_mass;
+        gammas[idx] = eos_rp::species_l_gamma;
+        spmasses[idx] = eos_rp::species_l_mass;
     }
 
-    idx = network_spec_index(species_m_name);
+    idx = network_spec_index(eos_rp::species_m_name);
     if (idx >= 0) {
-        gammas[idx] = species_m_gamma;
-        spmasses[idx] = species_m_mass;
+        gammas[idx] = eos_rp::species_m_gamma;
+        spmasses[idx] = eos_rp::species_m_mass;
     }
 
-    idx = network_spec_index(species_n_name);
+    idx = network_spec_index(eos_rp::species_n_name);
     if (idx >= 0) {
-        gammas[idx] = species_n_gamma;
-        spmasses[idx] = species_n_mass;
+        gammas[idx] = eos_rp::species_n_gamma;
+        spmasses[idx] = eos_rp::species_n_mass;
     }
 
 }
@@ -118,7 +118,7 @@ template <typename I>
 AMREX_GPU_HOST_DEVICE AMREX_INLINE
 bool is_input_valid (I input)
 {
-  static_assert(std::is_same<I, eos_input_t>::value, "input must be either eos_input_rt or eos_input_re");
+  static_assert(std::is_same_v<I, eos_input_t>, "input must be either eos_input_rt or eos_input_re");
 
   bool valid = false;
 
@@ -135,14 +135,14 @@ template <typename I, typename T>
 AMREX_GPU_HOST_DEVICE AMREX_INLINE
 void actual_eos (I input, T& state)
 {
-    static_assert(std::is_same<I, eos_input_t>::value, "input must be either eos_input_rt or eos_input_re");
+    static_assert(std::is_same_v<I, eos_input_t>, "input must be either eos_input_rt or eos_input_re");
 
-    const Real gasconstant = 8.3144725e7;
-    const Real protonmass = 1.672621637e-24;
+    const amrex::Real gasconstant = C::n_A * C::k_B;
+    const amrex::Real protonmass = C::m_p;
     // Special gamma factors
-    Real sum_Abarinv = 0.0_rt;
-    Real sum_gammasinv = 0.0_rt;
-    Real rhotot = 0.0_rt;
+    amrex::Real sum_Abarinv = 0.0_rt;
+    amrex::Real sum_gammasinv = 0.0_rt;
+    amrex::Real rhotot = 0.0_rt;
 
     for (int n = 0; n < NumSpec; ++n) {
         rhotot += state.xn[n]*spmasses[n];
@@ -154,6 +154,7 @@ void actual_eos (I input, T& state)
     }
 
     sum_Abarinv *= protonmass/rhotot;
+    state.mu = 1.0 / sum_Abarinv;
     sum_gammasinv /= sum_Abarinv;
 
     //-------------------------------------------------------------------------
@@ -161,7 +162,9 @@ void actual_eos (I input, T& state)
     // and temp as needed from the inputs.
     //-------------------------------------------------------------------------
 
-    Real temp, dens, eint;
+    amrex::Real temp = NAN;
+    amrex::Real dens = NAN;
+    amrex::Real eint = NAN;
 
     switch (input) {
 
@@ -209,11 +212,16 @@ void actual_eos (I input, T& state)
 
     case eos_input_rp:
         // dens, pressure, and xmass are inputs
-#ifndef AMREX_USE_GPU
-        amrex::Error("eos_input_rp is not supported");
-#endif
 
-          break;
+        if constexpr (has_pressure<T>::value) {
+            dens = state.rho;
+
+            // stop the integration if the pressure < 0
+            AMREX_ASSERT(state.p > 0.);
+            eint = state.p * sum_gammasinv / dens;
+            temp = eint / (sum_gammasinv * gasconstant * sum_Abarinv);
+        }
+        break;
 
     case eos_input_ps:
         // pressure, entropy, and xmass are inputs
@@ -261,9 +269,26 @@ void actual_eos (I input, T& state)
         state.e = eint;
     }
 
-    Real dedT = sum_gammasinv * sum_Abarinv * gasconstant;
+    if constexpr (has_pressure<T>::value) {
+        amrex::Real pressure = state.rho * eint / sum_gammasinv;
+        state.p = pressure;
+
+        state.dpdT = pressure / temp;
+        state.dpdr = pressure / dens;
+        state.cs = std::sqrt((1.0 + 1.0/sum_gammasinv) * state.p /state.rho);
+        if constexpr (has_G<T>::value) {
+            state.G = 0.5 * (1.0 + (1.0 + 1.0/sum_gammasinv));
+        }
+    }
+
+    amrex::Real dedT = sum_gammasinv * sum_Abarinv * gasconstant;
+    amrex::Real dedr = 0.0_rt;
     if constexpr (has_energy<T>::value) {
         state.dedT = dedT;
+        state.dedr = dedr;
+        if constexpr (has_pressure<T>::value) {
+            state.dpde = state.dpdT / state.dedT;
+        }
     }
 
 }

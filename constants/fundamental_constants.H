@@ -1,7 +1,7 @@
-// Fundamental constants taken from NIST's 2010 CODATA recommended values
+#ifndef FUNDAMENTAL_CONSTANTS_H
+#define FUNDAMENTAL_CONSTANTS_H
 
-#ifndef _fundamental_constants_H_
-#define _fundamental_constants_H_
+// Fundamental constants taken from NIST's 2010 CODATA recommended values
 
 #include <AMReX.H>
 #include <AMReX_REAL.H>
@@ -50,10 +50,10 @@ namespace C
 
     // mass of electron
     constexpr amrex::Real m_e = 9.10938291e-28;  // g
-  
+
     // atomic mass unit
     constexpr amrex::Real m_u = 1.6605390666e-24; // g
-  
+
     // electron charge
     // NIST: q_e = 1.602176565e-19 C
     //

@@ -102,11 +102,11 @@ void main_main ()
 
     init_unit_test();
 
-    if (jacobian != 1) {
-        amrex::Error("test_rhs only works for jacobian = 1");
+    if (integrator_rp::jacobian != 1) {
+        amrex::Error("test_rhs only works for integrator.jacobian = 1");
     }
 
-    // C++ EOS initialization (must be done after Fortran eos_init and init_extern_parameters)
+    // C++ EOS initialization (must be done after init_extern_parameters)
     eos_init(small_temp, small_dens);
 
     // C++ Network, RHS, screening, rates initialization
@@ -120,7 +120,7 @@ void main_main ()
     // time = starting time in the simulation
     Real time = 0.0;
 
-    // How Boxes are distrubuted among MPI processes
+    // How Boxes are distributed among MPI processes
     DistributionMapping dm(ba);
 
     // we allocate our main multifabs

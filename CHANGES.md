@@ -1,3 +1,314 @@
+# 24.08
+
+  * autodiff is now used with the templated reaction networks (#1614)
+    + some autodiff clean-ups and derivative fixes (#1604, #1612,
+    #1613, #1616, #1619, #1633)
+
+  * we can now output warnings from GPUs if you compile with
+    `USE_GPU_PRINTF=TRUE` (#1629, #1635)
+
+  * documentation improvements (#1570, #1628)
+
+  * a new jacobian unit (`jac_cell`) test was added that compares the
+    numerical and analytic Jacobians (#1618)
+
+  * support for Strang + NSE has been removed.  NSE only works with
+    SDC now (#1549, #1621)
+
+  * the network `CNO_He_burn` was added for explosive H/He burning
+    (#1622)
+
+  * code clean-ups (#1582, #1602, #1609, #1623, #1624, #1625, #1626,
+    #1627, #1631, #1639)
+
+  * `test_nse_net` now also tests the NSE EOS interface (#1621)
+
+  * the self-consistent NSE + SDC update has been synced with the
+    tabular NSE implementation (#1569, #1607, #1617)
+
+  * `test_jac` was not correctly evaluating the numerical Jacobian
+    (#1615)
+
+  * the `fast_atan` function is now more accurate (#1611)
+
+  * `test_ase` was renamed `test_nse_net` and the old `test_nse` was
+    removed (#1610)
+
+  * the old `test_screening` unit test was removed (#1608)
+
+  * the RKC integrator now supports NSE bailout (#1544)
+
+  * a second temperature check for tabular NSE was added -- above this
+    temperature we don't consider composition (#1547)
+
+  * a SDC+NSE unit test was added (#1548)
+
+  * a fast log and fast pow approximation was added (#1591)
+
+  * the primordial_chem network now uses the fast math routines (#1605)
+
+  * fix potential Inf in constexpr linear algebra (#1603)
+
+# 24.07
+
+   * added an autodiff library and converted all of the screening
+     functions to use autodiff for the thermodynamic derivatives
+     (#1581, #1588, #1593, #1596, #1597, #1600)
+
+   * some testing infrastructure fixes (#1598, #1589)
+
+   * documentation improvements (#1594)
+
+   * added approximate math functions for exp and atan (#1583, #1586)
+
+   * fix return code for PrimordialChem unit test (#1590)
+
+   * NSE optimizations (including chabrier1998 screening) #1585
+
+   * remove "using namespace amrex" from most headers (#1584)
+
+   * NSE table can work with other network now (#1576, #1577, #1580)
+
+   * the `subch_full` and `subch_approx` networks were removed -- these
+     are replaced by `subch_simple` and `subch_base` (#1578)
+
+   * retry tolerances now default to use the same values as the first
+     attempt, unless they are explicitly set in an inputs file (#1573)
+
+# 24.06
+
+   * added the ability to access the runtime parameters via a struct.
+     This will eventually be used to remove the dependency on globals
+     (#1433, #1575)
+
+   * simplified the integrators by extracting common infrastructure
+     into setup and cleanup functions (#1515, #1546)
+
+   * lots of documentation improvements including sectioning (#1559)
+     integrators (#1560, #1561, #1562, #1563, #1566, #1567, #1568),
+     runtime parameters (#1557), and link checking (#1552)
+
+   * CUDA no longer requires VODE + generalize some `AMREX_USE_CUDA`
+     to `AMREX_USE_GPU` (#1564)
+
+   * self-consistent NSE now accepted the temperature threshold as a
+     runtime parameter (#1558)
+
+   * general code cleanups (#1537, #1551, #1553, #1554)
+
+   * unit tests no longer append `.cxx` to output (#1309)
+
+   * added an `eos_rh_t` EOS type (#1539)
+
+# 24.05
+
+   * Runtime parameters can now be type `bool` (#1536)
+
+   * more clang-tidy and compiler warning cleaning (#1527 #1530,
+     #1532, #1533)
+
+   * Remove recursion in quicksort to avoid CUDA stack limits (#1531)
+
+   * Update the pynucastro networks to cache derived rate partition
+     functions (#1529)
+
+# 24.04
+
+   * A new `test_screening_templated` unit test was added -- this
+     works with any of the templated networks. (#1525)
+
+   * A lot of small code clean-ups from clang-tidy (#1516, #1518, #1519, #1520, #1522)
+
+   * The NSE solver was optimized (#1503, #1504, #1506, #1507, #1508)
+
+   * The integrator code was synced up between implementations, fixing
+     a bug in the RKC retry tolerances (#1513)
+
+   * A `reinterpret_cast` in `rhs.H` was removed (#1435)
+
+# 24.03
+
+   * pivoting in the linear algebra routines can now be disabled
+     (#1454)
+
+   * the scaling of the energy derivatives in the Jacobian when
+     running with `integrator.scale_system=1` has been fixed (#1479)
+
+   * added a new linear algebra unit test (#1493)
+
+   * when building with HIP we disable forced inlining (#1490)
+
+   * improved the energy update with NSE and remove unused terms
+     (#1483, #1484, #1485)
+
+   * remove `using namespace amrex` from most headers (#1465, #1474)
+
+   * updated the pynucastro networks to pynucastro 2.2.0 (#1470)
+
+   * fixed an error code check in the VODE integrator (#1472)
+
+   * added a zone-by-zone retry capability to the burner (#969)
+
+# 24.02
+
+   * Lots of general code cleaning from coverity and clang-tidy
+     (#1450, #1452, #1453, #1460, #1459, #1457, #1458)
+
+   * Fixed a bug in the VODE pivoting when a cached Jacobian is used
+     (#1456)
+
+   * Added reverse rates to CNO_extras (#1445)
+
+   * Sync networks up with pynucastro to get constexpr mion/bion
+     (#1437)
+
+   * NSE+SDC improvements (#1431)
+
+   * Start of moving the runtime parameters from globals to structs
+     (#1422)
+
+# 24.01
+
+   * The quantum corrections for the Chabrier screening are
+     now optional (#1428)
+
+   * We've replaced std::pow() with amrex::Math::powi for integer
+     powers for better GPU performance (#1432)
+
+   * `in_nse` now works with an `eos_t` for tabular NSE (#1424)
+
+   * There are a new set of interfaces for inverting the EOS when
+     we are in NSE (with the tabular NSE) that consistently find
+     T and the composition (#1405, #1430)
+
+   * The NSE table now uses finer spacing (#1427)
+
+   * The SDC+NSE update for tabular NSE is now based on a 2nd-order
+     Runge-Kutta method (#1415)
+
+   * An additional check on molar fractions was added to
+     self-consistent NSE to determine if we are in NSE (#1417)
+
+   * The NSE table interface was changed (#1404, #1418)
+
+   * A script that checks if a network is compatible with
+     self-consistent NSE was added (#1416)
+
+   * constant T evolution was fixed (#1408)
+
+   * An unsafe reinterpret_cast was removed from linear algebra (#1412)
+
+   * Methods for computing T derivatives of an NSE table quantity were
+     added (#1407)
+
+# 23.12
+
+  * The SDC+NSE update now includes plasma neutrino losses (#1357,
+    #1400)
+
+  * The default tabular NSE interpolation is now cubic (#1399)
+
+  * Self-consistent NSE now requires chabrier1998 or null screening
+    (#1398)
+
+  * A new network, subch_base, was added that further simplifies
+    subch_simple (#1393)
+
+  * A slightly larger network for Urca was added (#1365)
+
+  * A new NSE table was added.  This is generated via pynucastro and
+    there is a python script that can be used to regenerate it (#1350)
+
+  * A bug was fixed in the neutrino cooling that was introduced in an
+    optimization last release (#1380)
+
+# 23.11
+
+  * The sneut5 neutrino cooling term was cleaned up (#1371, #1372,
+    #1373, #1374, #1375, #1377, #1378, #1379)
+
+  * The number of predictor-corrector iterations for the SDC+NSE algorithm
+    is now a runtime parameter (#1370)
+
+  * The Urca network now includes a more accurate rate for neutron decay
+    and electon-capture onto a proton. (#1359)
+
+  * The He-C-Fe-group network now includes the positron parts of the
+    weak reaction rates (#1360)
+
+  * A check was added to ensure that the helm_table.dat is valid on
+    reading (#1355)
+
+# 23.10
+
+  * The simplified-SDC and true-SDC code paths for integration
+    have been merged (#1338,  #1340, #1341).
+
+  * All pynucastro networks have been updated with the latest
+    version of pynucastro (2.1.0) (#1342)
+
+  * The neutrino cooling terms now use templating on derivatives
+    (#1329)
+
+  * `NUM_EXTRA_SPECIES` was removed (#1321)
+
+# 23.09
+
+  * The file NETWORK_PROPERTIES has been removed from each network,
+    as the legacy screening method is no longer used. (#1310)
+
+  * The rprox network was updated and the Jacobian was fixed (#1300)
+
+  * The primordial_chem EOS now can take density and pressure as
+    inputs (#1302)
+
+# 23.07
+
+  * The preprocessor variable EXTRA_THERMO has been removed.
+    Use cases that depend on dpdA/dpdZ or dedA/dedZ should use
+    eos_extra_t, which is a container that holds all of the
+    entities in eos_t as well as these derivatives wrt A and Z. (#1229)
+
+  * added the ability to scale the energy we integrate by
+    the initial energy in the ODE integration (#1224)
+
+  * added an implementation of the Gershgorin circle theorem
+    for estimating the spectral radius of our ODE system (#1222)
+
+  * removed SDC_EVOLVE_ENTHALPY -- this was not being used (#1204)
+
+# 23.06
+
+  * Added a new Runge-Kutta-Chebyshev integrator (#1191)
+
+  * Lots of clean-up to the primordial chem network (#1180, #1181
+    #1198)
+
+  * Namespaces for the runtime parameters are now required in C++ (
+
+  * The SDC+NSE update for tabular NSE was fixed -- we were previously
+    computing the energy release incorrectly (#1092)
+
+# 23.05
+
+  * The abort_on_failure runtime parameter has been removed (#1174)
+
+# 23.04
+
+  * added preliminary CMake support (#1151, #1164, #1166)
+
+  * added code of conduct (#1152)
+
+  * clang-tidy code clean-ups(#1141, #1153, #1156)
+
+  * burn_t now stores whether we entered NSE (#1144, #1147)
+
+  * burn_t now store chemical potentials for NSE (#1149)
+
+  * some NSE solver updates to make it easier to enter NSE (#1138, #1139)
+
+  * a new CNO + rp network for XRBs (#1145)
+
 # 23.03
 
   * updated all of the pynucastro networks to the latest
@@ -50,7 +361,7 @@
 
 # 22.11
 
-  * use of the auxillary state to define composition is now enabled
+  * use of the auxiliary state to define composition is now enabled
     via USE_AUX_THERMO and the preprocessor variable AUX_THERMO
     (#1003)
 
@@ -159,7 +470,7 @@
     breakout reactions (#751)
 
   * Some fixes to the NSE bailout in aprox19 (#739, #753, #755) and
-    the relaxation check on the NSE critera (#754)
+    the relaxation check on the NSE criteria (#754)
 
   * Added a new unit test for single-zone SDC (burn_cell_sdc) (#744)
 
@@ -292,7 +603,7 @@
 # 20.08
 
    * Several of the unit tests had separate C++ and Fortran
-     implementions.  These have been unified (#343, #344, #345)
+     implementations.  These have been unified (#343, #344, #345)
 
    * The VBDF integrator was removed (#348)
 
@@ -544,7 +855,7 @@
     corresponding inverse from the work of Deboer et al. 2017
     (https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.89.035007).
     To use the new rate, user must set `use_c12ag_deboer17` to `true`.
-    This rate is only useable in the `aprox13`, `aprox19`, `aprox21`,
+    This rate is only usable in the `aprox13`, `aprox19`, `aprox21`,
     and `iso7` reaction rate networks. Closes issue #44.
 
   * a routine util/cj_detonation was added to compute the
@@ -566,7 +877,7 @@
 
    * we now disable some composition derivatives in the EOS
      by default, for performance and memory reasons.  They can
-     be reenabled by defining the preprocessor variable
+     be re-enabled by defining the preprocessor variable
      EXTRA_THERMO (PR #59)
 
 # 17.10
