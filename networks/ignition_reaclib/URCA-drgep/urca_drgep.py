@@ -22,7 +22,7 @@ rate_ids = [
             "Ne23 + p --> n + Na23 <rath_reaclib__>",
             "Na23 + p --> He4 + Ne20 <il10_reaclib__>",
             "Mg27 + p --> n + Al27 <rath_reaclib__>",
-            #"N13 --> C13 <tabular_tabular>",
+            "N13 --> C13 <tabular_tabular>",
             "p --> n <tabular_tabular>",
             "Al27 --> Mg27 <tabular_tabular>",
             "Na23 --> Ne23 <tabular_tabular>",
