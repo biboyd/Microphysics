@@ -1,6 +1,6 @@
 import pynucastro as pyna
 
-rate_ids = ["N13 --> C13 <wc12_reaclib_weak_>",
+rate_ids = [
             "N13 --> p + C12 <ls09_reaclib__reverse>",
             "C12 + n --> C13 <ks03_reaclib__>",
             "C12 + p --> N13 <ls09_reaclib__>",
@@ -22,6 +22,7 @@ rate_ids = ["N13 --> C13 <wc12_reaclib_weak_>",
             "Ne23 + p --> n + Na23 <rath_reaclib__>",
             "Na23 + p --> He4 + Ne20 <il10_reaclib__>",
             "Mg27 + p --> n + Al27 <rath_reaclib__>",
+            #"N13 --> C13 <tabular_tabular>",
             "p --> n <tabular_tabular>",
             "Al27 --> Mg27 <tabular_tabular>",
             "Na23 --> Ne23 <tabular_tabular>",
@@ -34,10 +35,12 @@ final_lib = pyna.Library()
 for rid in rate_ids:
     final_lib.add_rate(full_lib.get_rate(rid))
 
+#explicitly ad A=21,25,27 pairs
 final_lib.add_rate(tl.get_rate_by_name("ne21(,)f21"))
 final_lib.add_rate(tl.get_rate_by_name("f21(,)ne21"))
 final_lib.add_rate(tl.get_rate_by_name("na25(,)mg25"))
 final_lib.add_rate(tl.get_rate_by_name("mg25(,)na25"))
 final_lib.add_rate(tl.get_rate_by_name("mg27(,)al27"))
+
 urca_net = pyna.AmrexAstroCxxNetwork(libraries=[final_lib])
 urca_net.write_network()

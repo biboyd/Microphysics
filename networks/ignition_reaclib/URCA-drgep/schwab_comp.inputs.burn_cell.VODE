@@ -1,0 +1,44 @@
+unit_test.run_prefix = "react_drgep_"
+
+unit_test.small_temp = 1e5
+unit_test.small_dens = 1e5
+
+integrator.burner_verbose = 0
+
+# Set which jacobian to use
+# 1 = analytic jacobian
+# 2 = numerical jacobian
+integrator.jacobian = 1
+
+integrator.renormalize_abundances = 1
+
+integrator.rtol_spec = 1.0e-12
+integrator.rtol_enuc = 1.0e-9
+integrator.atol_spec = 1.0e-12
+integrator.atol_enuc = 1.0e-9
+
+
+unit_test.tmax  = 1e2
+unit_test.nsteps = 10000
+
+unit_test.density       = 4.5e9
+unit_test.temperature   = 5.5e8
+
+unit_test.X1  = 0.0      #n
+unit_test.X2  = 0.0      #h1
+unit_test.X3  = 0.0      #he4
+unit_test.X4  = 4.05e-1  #c12
+unit_test.X5  = 0.0      #c13
+unit_test.X6  = 0.0      #n13
+unit_test.X7  = 5.76e-1  #o16
+unit_test.X8  = 0.0      #o17
+unit_test.X9  = 3.74e-5  #f21
+unit_test.X10 = 1.34e-3 #ne20
+unit_test.X11 = 0.0     #ne21
+unit_test.X12 = 1.37e-2 #ne22
+unit_test.X13 = 1.42e-4 #ne23
+unit_test.X14 = 0.0     #na23
+unit_test.X15 = 3.84e-5 #na25
+unit_test.X16 = 0.0     #mg25
+unit_test.X17 = 5.60e-5 #mg27
+unit_test.X18 = 0.0     #al27
