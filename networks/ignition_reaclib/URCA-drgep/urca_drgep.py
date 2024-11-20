@@ -1,7 +1,7 @@
 import pynucastro as pyna
 
 rate_ids = [
-            "N13 --> p + C12 <ls09_reaclib__reverse>",
+            #"N13 --> p + C12 <ls09_reaclib__reverse>",
             "C12 + n --> C13 <ks03_reaclib__>",
             "C12 + p --> N13 <ls09_reaclib__>",
             "C12 + He4 --> O16 <nac2_reaclib__>",
@@ -14,11 +14,11 @@ rate_ids = [
             "C12 + C12 --> p + Na23 <cf88_reaclib__>",
             "C12 + C12 --> He4 + Ne20 <cf88_reaclib__>",
             "C13 + He4 --> n + O16 <gl12_reaclib__>",
-            "N13 + n --> p + C13 <nacr_reaclib__reverse>",
+            #"N13 + n --> p + C13 <nacr_reaclib__reverse>",
             "N13 + He4 --> p + O16 <cf88_reaclib__>",
             "O16 + C12 --> p + Al27 <cf88_reaclib__>",
             "O17 + He4 --> n + Ne20 <nacr_reaclib__>",
-            "Ne20 + n --> He4 + O17 <nacr_reaclib__reverse>",
+            #"Ne20 + n --> He4 + O17 <nacr_reaclib__reverse>",
             "Ne23 + p --> n + Na23 <rath_reaclib__>",
             "Na23 + p --> He4 + Ne20 <il10_reaclib__>",
             "Mg27 + p --> n + Al27 <rath_reaclib__>",
