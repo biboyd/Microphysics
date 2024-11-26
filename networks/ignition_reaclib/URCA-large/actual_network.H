@@ -44,11 +44,20 @@ namespace network
         else if constexpr (spec == N13) {
             return 94.10522604799917_rt;
         }
+        else if constexpr (spec == N14) {
+            return 104.65860734799753_rt;
+        }
         else if constexpr (spec == O16) {
             return 127.6193154119992_rt;
         }
         else if constexpr (spec == O17) {
             return 131.76239561199873_rt;
+        }
+        else if constexpr (spec == O18) {
+            return 139.8077658120019_rt;
+        }
+        else if constexpr (spec == F18) {
+            return 137.36950247599816_rt;
         }
         else if constexpr (spec == F21) {
             return 162.50415677599813_rt;
@@ -70,6 +79,9 @@ namespace network
         }
         else if constexpr (spec == Na25) {
             return 202.53493510400222_rt;
+        }
+        else if constexpr (spec == Mg24) {
+            return 198.2570479679962_rt;
         }
         else if constexpr (spec == Mg25) {
             return 205.5875680680001_rt;
@@ -139,55 +151,48 @@ namespace Rates
         k_n_C12_to_C13 = 1,
         k_p_C12_to_N13 = 2,
         k_He4_C12_to_O16 = 3,
-        k_n_O16_to_O17 = 4,
-        k_He4_O16_to_Ne20 = 5,
-        k_He4_O17_to_Ne21 = 6,
-        k_p_F21_to_Ne22 = 7,
-        k_He4_F21_to_Na25 = 8,
-        k_n_Ne20_to_Ne21 = 9,
-        k_n_Ne21_to_Ne22 = 10,
-        k_He4_Ne21_to_Mg25 = 11,
+        k_p_C13_to_N14 = 4,
+        k_He4_N14_to_F18 = 5,
+        k_n_O16_to_O17 = 6,
+        k_He4_O16_to_Ne20 = 7,
+        k_p_O17_to_F18 = 8,
+        k_He4_O17_to_Ne21 = 9,
+        k_He4_O18_to_Ne22 = 10,
+        k_He4_Ne20_to_Mg24 = 11,
         k_n_Ne22_to_Ne23 = 12,
         k_p_Ne22_to_Na23 = 13,
-        k_He4_Ne23_to_Mg27 = 14,
-        k_He4_Na23_to_Al27 = 15,
-        k_C12_C12_to_p_Na23 = 16,
-        k_C12_C12_to_He4_Ne20 = 17,
-        k_p_C13_to_n_N13 = 18,
-        k_He4_C13_to_n_O16 = 19,
-        k_He4_N13_to_p_O16 = 20,
-        k_C12_O16_to_p_Al27 = 21,
-        k_He4_O17_to_n_Ne20 = 22,
-        k_p_F21_to_n_Ne21 = 23,
-        k_He4_Ne22_to_n_Mg25 = 24,
-        k_p_Ne23_to_n_Na23 = 25,
-        k_p_Na23_to_He4_Ne20 = 26,
-        k_p_Na25_to_n_Mg25 = 27,
-        k_p_Na25_to_He4_Ne22 = 28,
-        k_p_Mg27_to_n_Al27 = 29,
-        k_He4_He4_He4_to_C12 = 30,
-        k_C13_to_N13 = 31,
-        k_N13_to_C13 = 32,
-        k_n_to_p = 33,
-        k_p_to_n = 34,
-        k_Al27_to_Mg27 = 35,
-        k_F21_to_Ne21 = 36,
-        k_Mg25_to_Na25 = 37,
-        k_Mg27_to_Al27 = 38,
-        k_Na23_to_Ne23 = 39,
-        k_Na25_to_Mg25 = 40,
-        k_Ne21_to_F21 = 41,
-        k_Ne23_to_Na23 = 42,
+        k_p_Na23_to_Mg24 = 14,
+        k_C12_C12_to_p_Na23 = 15,
+        k_C12_C12_to_He4_Ne20 = 16,
+        k_He4_C13_to_n_O16 = 17,
+        k_C12_O16_to_p_Al27 = 18,
+        k_C12_O16_to_He4_Mg24 = 19,
+        k_p_O17_to_He4_N14 = 20,
+        k_He4_Ne21_to_n_Mg24 = 21,
+        k_p_Ne23_to_n_Na23 = 22,
+        k_p_Na23_to_He4_Ne20 = 23,
+        k_p_Na25_to_n_Mg25 = 24,
+        k_p_Na25_to_He4_Ne22 = 25,
+        k_p_Mg27_to_n_Al27 = 26,
+        k_N13_to_C13 = 27,
+        k_Al27_to_Mg27 = 28,
+        k_F18_to_O18 = 29,
+        k_F21_to_Ne21 = 30,
+        k_Mg25_to_Na25 = 31,
+        k_Na23_to_Ne23 = 32,
+        k_Na25_to_Mg25 = 33,
+        k_Ne21_to_F21 = 34,
+        k_Ne23_to_Na23 = 35,
         NumRates = k_Ne23_to_Na23
     };
 
     // number of reaclib rates
 
-    const int NrateReaclib = 30;
+    const int NrateReaclib = 26;
 
     // number of tabular rates
 
-    const int NrateTabular = 12;
+    const int NrateTabular = 9;
 
     // rate names -- note: the rates are 1-based, not zero-based, so we pad
     // this vector with rate_names[0] = "" so the indices line up with the
@@ -198,45 +203,38 @@ namespace Rates
         "n_C12_to_C13",  // 1,
         "p_C12_to_N13",  // 2,
         "He4_C12_to_O16",  // 3,
-        "n_O16_to_O17",  // 4,
-        "He4_O16_to_Ne20",  // 5,
-        "He4_O17_to_Ne21",  // 6,
-        "p_F21_to_Ne22",  // 7,
-        "He4_F21_to_Na25",  // 8,
-        "n_Ne20_to_Ne21",  // 9,
-        "n_Ne21_to_Ne22",  // 10,
-        "He4_Ne21_to_Mg25",  // 11,
+        "p_C13_to_N14",  // 4,
+        "He4_N14_to_F18",  // 5,
+        "n_O16_to_O17",  // 6,
+        "He4_O16_to_Ne20",  // 7,
+        "p_O17_to_F18",  // 8,
+        "He4_O17_to_Ne21",  // 9,
+        "He4_O18_to_Ne22",  // 10,
+        "He4_Ne20_to_Mg24",  // 11,
         "n_Ne22_to_Ne23",  // 12,
         "p_Ne22_to_Na23",  // 13,
-        "He4_Ne23_to_Mg27",  // 14,
-        "He4_Na23_to_Al27",  // 15,
-        "C12_C12_to_p_Na23",  // 16,
-        "C12_C12_to_He4_Ne20",  // 17,
-        "p_C13_to_n_N13",  // 18,
-        "He4_C13_to_n_O16",  // 19,
-        "He4_N13_to_p_O16",  // 20,
-        "C12_O16_to_p_Al27",  // 21,
-        "He4_O17_to_n_Ne20",  // 22,
-        "p_F21_to_n_Ne21",  // 23,
-        "He4_Ne22_to_n_Mg25",  // 24,
-        "p_Ne23_to_n_Na23",  // 25,
-        "p_Na23_to_He4_Ne20",  // 26,
-        "p_Na25_to_n_Mg25",  // 27,
-        "p_Na25_to_He4_Ne22",  // 28,
-        "p_Mg27_to_n_Al27",  // 29,
-        "He4_He4_He4_to_C12",  // 30,
-        "C13_to_N13",  // 31,
-        "N13_to_C13",  // 32,
-        "n_to_p",  // 33,
-        "p_to_n",  // 34,
-        "Al27_to_Mg27",  // 35,
-        "F21_to_Ne21",  // 36,
-        "Mg25_to_Na25",  // 37,
-        "Mg27_to_Al27",  // 38,
-        "Na23_to_Ne23",  // 39,
-        "Na25_to_Mg25",  // 40,
-        "Ne21_to_F21",  // 41,
-        "Ne23_to_Na23"  // 42,
+        "p_Na23_to_Mg24",  // 14,
+        "C12_C12_to_p_Na23",  // 15,
+        "C12_C12_to_He4_Ne20",  // 16,
+        "He4_C13_to_n_O16",  // 17,
+        "C12_O16_to_p_Al27",  // 18,
+        "C12_O16_to_He4_Mg24",  // 19,
+        "p_O17_to_He4_N14",  // 20,
+        "He4_Ne21_to_n_Mg24",  // 21,
+        "p_Ne23_to_n_Na23",  // 22,
+        "p_Na23_to_He4_Ne20",  // 23,
+        "p_Na25_to_n_Mg25",  // 24,
+        "p_Na25_to_He4_Ne22",  // 25,
+        "p_Mg27_to_n_Al27",  // 26,
+        "N13_to_C13",  // 27,
+        "Al27_to_Mg27",  // 28,
+        "F18_to_O18",  // 29,
+        "F21_to_Ne21",  // 30,
+        "Mg25_to_Na25",  // 31,
+        "Na23_to_Ne23",  // 32,
+        "Na25_to_Mg25",  // 33,
+        "Ne21_to_F21",  // 34,
+        "Ne23_to_Na23"  // 35,
     };
 
 }

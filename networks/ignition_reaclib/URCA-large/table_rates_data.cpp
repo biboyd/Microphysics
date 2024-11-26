@@ -8,30 +8,20 @@ using namespace amrex;
 namespace rate_tables
 {
 
-    AMREX_GPU_MANAGED table_t j_C13_N13_meta;
-    AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 34, 1, 151, 1, 6> j_C13_N13_data;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 151> j_C13_N13_rhoy;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 34> j_C13_N13_temp;
-
     AMREX_GPU_MANAGED table_t j_N13_C13_meta;
     AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 34, 1, 151, 1, 6> j_N13_C13_data;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 151> j_N13_C13_rhoy;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 34> j_N13_C13_temp;
 
-    AMREX_GPU_MANAGED table_t j_n_p_meta;
-    AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 13, 1, 11, 1, 6> j_n_p_data;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 11> j_n_p_rhoy;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 13> j_n_p_temp;
-
-    AMREX_GPU_MANAGED table_t j_p_n_meta;
-    AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 13, 1, 11, 1, 6> j_p_n_data;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 11> j_p_n_rhoy;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 13> j_p_n_temp;
-
     AMREX_GPU_MANAGED table_t j_Al27_Mg27_meta;
     AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_Al27_Mg27_data;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 152> j_Al27_Mg27_rhoy;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 39> j_Al27_Mg27_temp;
+
+    AMREX_GPU_MANAGED table_t j_F18_O18_meta;
+    AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_F18_O18_data;
+    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 152> j_F18_O18_rhoy;
+    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 39> j_F18_O18_temp;
 
     AMREX_GPU_MANAGED table_t j_F21_Ne21_meta;
     AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_F21_Ne21_data;
@@ -42,11 +32,6 @@ namespace rate_tables
     AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_Mg25_Na25_data;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 152> j_Mg25_Na25_rhoy;
     AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 39> j_Mg25_Na25_temp;
-
-    AMREX_GPU_MANAGED table_t j_Mg27_Al27_meta;
-    AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_Mg27_Al27_data;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 152> j_Mg27_Al27_rhoy;
-    AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 39> j_Mg27_Al27_temp;
 
     AMREX_GPU_MANAGED table_t j_Na23_Ne23_meta;
     AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_Na23_Ne23_data;
@@ -79,14 +64,6 @@ void init_tabular()
 
     using namespace rate_tables;
 
-    j_C13_N13_meta.ntemp = 34;
-    j_C13_N13_meta.nrhoy = 151;
-    j_C13_N13_meta.nvars = 6;
-    j_C13_N13_meta.nheader = 6;
-
-    init_tab_info(j_C13_N13_meta, "13c-13n_betadecay.dat", j_C13_N13_rhoy, j_C13_N13_temp, j_C13_N13_data);
-
-
     j_N13_C13_meta.ntemp = 34;
     j_N13_C13_meta.nrhoy = 151;
     j_N13_C13_meta.nvars = 6;
@@ -95,28 +72,20 @@ void init_tabular()
     init_tab_info(j_N13_C13_meta, "13n-13c_electroncapture.dat", j_N13_C13_rhoy, j_N13_C13_temp, j_N13_C13_data);
 
 
-    j_n_p_meta.ntemp = 13;
-    j_n_p_meta.nrhoy = 11;
-    j_n_p_meta.nvars = 6;
-    j_n_p_meta.nheader = 5;
-
-    init_tab_info(j_n_p_meta, "n-p_betadecay.dat", j_n_p_rhoy, j_n_p_temp, j_n_p_data);
-
-
-    j_p_n_meta.ntemp = 13;
-    j_p_n_meta.nrhoy = 11;
-    j_p_n_meta.nvars = 6;
-    j_p_n_meta.nheader = 5;
-
-    init_tab_info(j_p_n_meta, "p-n_electroncapture.dat", j_p_n_rhoy, j_p_n_temp, j_p_n_data);
-
-
     j_Al27_Mg27_meta.ntemp = 39;
     j_Al27_Mg27_meta.nrhoy = 152;
     j_Al27_Mg27_meta.nvars = 6;
     j_Al27_Mg27_meta.nheader = 6;
 
     init_tab_info(j_Al27_Mg27_meta, "27al-27mg_electroncapture.dat", j_Al27_Mg27_rhoy, j_Al27_Mg27_temp, j_Al27_Mg27_data);
+
+
+    j_F18_O18_meta.ntemp = 39;
+    j_F18_O18_meta.nrhoy = 152;
+    j_F18_O18_meta.nvars = 6;
+    j_F18_O18_meta.nheader = 6;
+
+    init_tab_info(j_F18_O18_meta, "18f-18o_electroncapture.dat", j_F18_O18_rhoy, j_F18_O18_temp, j_F18_O18_data);
 
 
     j_F21_Ne21_meta.ntemp = 39;
@@ -133,14 +102,6 @@ void init_tabular()
     j_Mg25_Na25_meta.nheader = 7;
 
     init_tab_info(j_Mg25_Na25_meta, "25mg-25na_electroncapture.dat", j_Mg25_Na25_rhoy, j_Mg25_Na25_temp, j_Mg25_Na25_data);
-
-
-    j_Mg27_Al27_meta.ntemp = 39;
-    j_Mg27_Al27_meta.nrhoy = 152;
-    j_Mg27_Al27_meta.nvars = 6;
-    j_Mg27_Al27_meta.nheader = 6;
-
-    init_tab_info(j_Mg27_Al27_meta, "27mg-27al_betadecay.dat", j_Mg27_Al27_rhoy, j_Mg27_Al27_temp, j_Mg27_Al27_data);
 
 
     j_Na23_Ne23_meta.ntemp = 39;

@@ -278,6 +278,15 @@ amrex::Real get_xn(const int index) {
     case 35:
         mass_fraction = X35;
         break;
+    case 36:
+        mass_fraction = X36;
+        break;
+    case 37:
+        mass_fraction = X37;
+        break;
+    case 38:
+        mass_fraction = X38;
+        break;
 
     }
 

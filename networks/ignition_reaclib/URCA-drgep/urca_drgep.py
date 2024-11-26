@@ -35,6 +35,8 @@ final_lib = pyna.Library()
 for rid in rate_ids:
     final_lib.add_rate(full_lib.get_rate(rid))
 
+# add some extra p captures
+
 #explicitly ad A=21,25,27 pairs
 final_lib.add_rate(tl.get_rate_by_name("ne21(,)f21"))
 final_lib.add_rate(tl.get_rate_by_name("f21(,)ne21"))
@@ -43,4 +45,19 @@ final_lib.add_rate(tl.get_rate_by_name("mg25(,)na25"))
 final_lib.add_rate(tl.get_rate_by_name("mg27(,)al27"))
 
 urca_net = pyna.AmrexAstroCxxNetwork(libraries=[final_lib])
-urca_net.write_network()
+print(f"Total Nuclei: {len(urca_net.unique_nuclei)}")
+print(urca_net.unique_nuclei)
+print(f"Total Rates Included: {len(final_lib.get_rates())}")
+full_link = full_lib.linking_nuclei(urca_net.unique_nuclei, with_reverse=False)
+dupes = full_link.find_duplicate_links()
+for d in dupes:
+    for r in d:
+        if isinstance(r, pyna.rates.ReacLibRate):
+            full_link.remove_rate(r)
+print(f"Total Rates possible: {len(full_link.get_rates())}")
+new_net = pyna.AmrexAstroCxxNetwork(libraries=[full_link])
+new_net.write_network()
+urca_net.plot(outfile="urca_net.png", rotated=True)
+new_net.plot(outfile="full_urca_net.png", rotated=True)
+#urca_net.write_network()
+

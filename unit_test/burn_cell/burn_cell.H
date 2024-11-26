@@ -210,6 +210,18 @@ void burn_cell_c()
         std::cout << element << " " << burn_state.xn[n] << std::endl;
     }
 
+    // compute and output electron fraction
+    Real Ye{0.};
+    Real Ye0{0.};
+    for (int n = 0; n < NumSpec; ++n) {
+        Ye += zion[n] * burn_state.xn[n] * aion_inv[n];
+        Ye0 += zion[n] * burn_state_in.xn[n] * aion_inv[n];
+    }
+    std:: cout << "Electron Fraction:  " << std::setw(25) << Ye << std::endl;;
+    std:: cout << "Neutronization:  " << std::setw(25)  << 1. - 2.*Ye << std::endl;;
+    std:: cout << "Delta Ye:  " << std::setw(25) << Ye - Ye0 << std::endl;;
+
+
     std::cout << "------------------------------------" << std::endl;
     std::cout << "species creation rates: " << std::endl;
     for (int n = 0; n < NumSpec; ++n) {

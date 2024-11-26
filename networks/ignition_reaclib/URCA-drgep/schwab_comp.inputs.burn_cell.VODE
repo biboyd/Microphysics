@@ -18,8 +18,8 @@ integrator.atol_spec = 1.0e-12
 integrator.atol_enuc = 1.0e-9
 
 
-unit_test.tmax  = 1e2
-unit_test.nsteps = 10000
+unit_test.tmax  = 1e1
+unit_test.nsteps = 1000
 
 unit_test.density       = 4.5e9
 unit_test.temperature   = 5.5e8
