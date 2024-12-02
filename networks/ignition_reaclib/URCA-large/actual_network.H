@@ -89,12 +89,6 @@ namespace network
         else if constexpr (spec == Mg25) {
             return 205.5875680680001_rt;
         }
-        else if constexpr (spec == Mg27) {
-            return 223.12401426799624_rt;
-        }
-        else if constexpr (spec == Al27) {
-            return 224.95193723199915_rt;
-        }
 
 
         // Return zero if we don't recognize the species.
@@ -170,35 +164,30 @@ namespace Rates
         k_C12_C12_to_p_Na23 = 17,
         k_C12_C12_to_He4_Ne20 = 18,
         k_He4_C13_to_n_O16 = 19,
-        k_C12_O16_to_p_Al27 = 20,
-        k_C12_O16_to_He4_Mg24 = 21,
-        k_n_O17_to_He4_C14 = 22,
-        k_p_O17_to_He4_N14 = 23,
-        k_He4_Ne21_to_n_Mg24 = 24,
-        k_p_Ne23_to_n_Na23 = 25,
-        k_p_Na23_to_He4_Ne20 = 26,
-        k_p_Na25_to_n_Mg25 = 27,
-        k_p_Na25_to_He4_Ne22 = 28,
-        k_p_Mg27_to_n_Al27 = 29,
-        k_N13_to_C13 = 30,
-        k_Al27_to_Mg27 = 31,
-        k_F18_to_O18 = 32,
-        k_F21_to_Ne21 = 33,
-        k_Mg25_to_Na25 = 34,
-        k_Na23_to_Ne23 = 35,
-        k_Na25_to_Mg25 = 36,
-        k_Ne21_to_F21 = 37,
-        k_Ne23_to_Na23 = 38,
+        k_n_O17_to_He4_C14 = 20,
+        k_p_O17_to_He4_N14 = 21,
+        k_He4_O17_to_n_Ne20 = 22,
+        k_He4_Ne21_to_n_Mg24 = 23,
+        k_p_Ne23_to_n_Na23 = 24,
+        k_p_Na23_to_He4_Ne20 = 25,
+        k_N13_to_C13 = 26,
+        k_F18_to_O18 = 27,
+        k_F21_to_Ne21 = 28,
+        k_Mg25_to_Na25 = 29,
+        k_Na23_to_Ne23 = 30,
+        k_Na25_to_Mg25 = 31,
+        k_Ne21_to_F21 = 32,
+        k_Ne23_to_Na23 = 33,
         NumRates = k_Ne23_to_Na23
     };
 
     // number of reaclib rates
 
-    const int NrateReaclib = 29;
+    const int NrateReaclib = 25;
 
     // number of tabular rates
 
-    const int NrateTabular = 9;
+    const int NrateTabular = 8;
 
     // rate names -- note: the rates are 1-based, not zero-based, so we pad
     // this vector with rate_names[0] = "" so the indices line up with the
@@ -225,25 +214,20 @@ namespace Rates
         "C12_C12_to_p_Na23",  // 17,
         "C12_C12_to_He4_Ne20",  // 18,
         "He4_C13_to_n_O16",  // 19,
-        "C12_O16_to_p_Al27",  // 20,
-        "C12_O16_to_He4_Mg24",  // 21,
-        "n_O17_to_He4_C14",  // 22,
-        "p_O17_to_He4_N14",  // 23,
-        "He4_Ne21_to_n_Mg24",  // 24,
-        "p_Ne23_to_n_Na23",  // 25,
-        "p_Na23_to_He4_Ne20",  // 26,
-        "p_Na25_to_n_Mg25",  // 27,
-        "p_Na25_to_He4_Ne22",  // 28,
-        "p_Mg27_to_n_Al27",  // 29,
-        "N13_to_C13",  // 30,
-        "Al27_to_Mg27",  // 31,
-        "F18_to_O18",  // 32,
-        "F21_to_Ne21",  // 33,
-        "Mg25_to_Na25",  // 34,
-        "Na23_to_Ne23",  // 35,
-        "Na25_to_Mg25",  // 36,
-        "Ne21_to_F21",  // 37,
-        "Ne23_to_Na23"  // 38,
+        "n_O17_to_He4_C14",  // 20,
+        "p_O17_to_He4_N14",  // 21,
+        "He4_O17_to_n_Ne20",  // 22,
+        "He4_Ne21_to_n_Mg24",  // 23,
+        "p_Ne23_to_n_Na23",  // 24,
+        "p_Na23_to_He4_Ne20",  // 25,
+        "N13_to_C13",  // 26,
+        "F18_to_O18",  // 27,
+        "F21_to_Ne21",  // 28,
+        "Mg25_to_Na25",  // 29,
+        "Na23_to_Ne23",  // 30,
+        "Na25_to_Mg25",  // 31,
+        "Ne21_to_F21",  // 32,
+        "Ne23_to_Na23"  // 33,
     };
 
 }

@@ -73,14 +73,23 @@ states = get_states(urca_big_net)
 unimportant_rates = urca_big_net.find_unimportant_rates(states, cutoff, chugunov_2009)
 
 all_lib.remove_rate(all_lib.get_rate_by_name("o18(a,n)ne21"))
-all_lib.remove_rate(all_lib.get_rate_by_name("o17(a,n)ne20"))
+#all_lib.remove_rate(all_lib.get_rate_by_name("o17(a,n)ne20"))
 #all_lib.remove_rate(all_lib.get_rate_by_name("f19(e,)o19"))
 #all_lib.remove_rate(all_lib.get_rate_by_name("o19(,e)f19"))
 all_lib.remove_rate(all_lib.get_rate_by_name("ne22(a,n)mg25"))
 
+# testing
+all_lib.remove_rate(all_lib.get_rate_by_name("o16(c12,a)mg24"))
+all_lib.remove_rate(all_lib.get_rate_by_name("o16(c12,p)al27"))
+all_lib.remove_rate(all_lib.get_rate_by_name("al27(e,)mg27"))
+all_lib.remove_rate(all_lib.get_rate_by_name("mg27(p,n)al27"))
+all_lib.remove_rate(all_lib.get_rate_by_name("na25(p,a)ne22"))
+all_lib.remove_rate(all_lib.get_rate_by_name("na25(p,n)mg25"))
+
 for r in unimportant_rates:
     all_lib.remove_rate(r)
 
+#all_lib.add_rate(tl.get_rate_by_name("mg27(,)al27"))
 urca_large_net = pyna.AmrexAstroCxxNetwork(libraries=[all_lib])
 print(all_lib)
 print(f"Total Nuclei: {len(urca_large_net.unique_nuclei)}")

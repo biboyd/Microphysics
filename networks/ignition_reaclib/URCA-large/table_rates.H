@@ -20,7 +20,7 @@ void init_tabular();
 // Log(g/cm^3)   Log(K)   erg   erg   erg   Log(1/s)          Log(erg/s)           Log(erg/s)
 //
 
-const int num_tables = 9;
+const int num_tables = 8;
 
 enum TableVars
 {
@@ -59,11 +59,6 @@ namespace rate_tables
     extern AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 34, 1, 151, 1, 6> j_N13_C13_data;
     extern AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 151> j_N13_C13_rhoy;
     extern AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 34> j_N13_C13_temp;
-
-    extern AMREX_GPU_MANAGED table_t j_Al27_Mg27_meta;
-    extern AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_Al27_Mg27_data;
-    extern AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 152> j_Al27_Mg27_rhoy;
-    extern AMREX_GPU_MANAGED amrex::Array1D<amrex::Real, 1, 39> j_Al27_Mg27_temp;
 
     extern AMREX_GPU_MANAGED table_t j_F18_O18_meta;
     extern AMREX_GPU_MANAGED amrex::Array3D<amrex::Real, 1, 39, 1, 152, 1, 6> j_F18_O18_data;
