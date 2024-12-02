@@ -123,6 +123,7 @@ constexpr amrex::Real get_spin_state(const int inuc) {
 
     case He4:
     case C12:
+    case C14:
     case O16:
     case O18:
     case Ne20:

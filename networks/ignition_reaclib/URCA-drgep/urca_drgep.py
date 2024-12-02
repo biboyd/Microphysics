@@ -60,4 +60,4 @@ new_net.write_network()
 urca_net.plot(outfile="urca_net.png", rotated=True)
 new_net.plot(outfile="full_urca_net.png", rotated=True)
 #urca_net.write_network()
-
+print(full_link)
