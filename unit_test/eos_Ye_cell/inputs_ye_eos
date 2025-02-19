@@ -1,0 +1,13 @@
+problem.small_temp = 1e5
+problem.small_dens = 1e5
+
+problem.density = -1
+problem.pressure =  2e27
+problem.temperature = 3.e8
+
+problem.XC12 = 0.4
+problem.XO16 = 0.6
+problem.XUrca23 = 5e-4
+problem.nUrca = 10
+
+

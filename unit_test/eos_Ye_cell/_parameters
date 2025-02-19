@@ -1,0 +1,15 @@
+@namespace: problem
+
+small_temp    real       1.e5
+small_dens    real       1.e5
+
+density       real       1.e7
+temperature   real       3.e9
+pressure      real       3.e9
+
+XC12          real       0.4
+XO16          real       0.6
+XUrca23       real       5e-4
+nUrca         int        10
+
+outfile       string     "output.csv"
