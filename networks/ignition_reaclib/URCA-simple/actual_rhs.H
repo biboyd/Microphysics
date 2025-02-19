@@ -228,12 +228,10 @@ void get_ydot_weak(const burn_t& state,
     auto screened_rates = rate_eval.screened_rates;
 
     ydot_nuc(N) =
-        -screened_rates(k_n_to_p)*Y(N) +
-        screened_rates(k_p_to_n)*Y(H1);
+        (-screened_rates(k_n_to_p)*Y(N) + screened_rates(k_p_to_n)*Y(H1));
 
     ydot_nuc(H1) =
-        screened_rates(k_n_to_p)*Y(N) +
-        -screened_rates(k_p_to_n)*Y(H1);
+        (screened_rates(k_n_to_p)*Y(N) + -screened_rates(k_p_to_n)*Y(H1));
 
     ydot_nuc(He4) = 0.0_rt;
 
@@ -265,14 +263,12 @@ void rhs_nuc(const burn_t& state,
     using namespace Rates;
 
     ydot_nuc(N) =
-        -screened_rates(k_n_to_p)*Y(N) +
-        screened_rates(k_p_to_n)*Y(H1) +
+        (-screened_rates(k_n_to_p)*Y(N) + screened_rates(k_p_to_n)*Y(H1)) +
         0.5*screened_rates(k_C12_C12_to_n_Mg23)*amrex::Math::powi<2>(Y(C12))*state.rho;
 
     ydot_nuc(H1) =
-        0.5*screened_rates(k_C12_C12_to_p_Na23)*amrex::Math::powi<2>(Y(C12))*state.rho +
-        screened_rates(k_n_to_p)*Y(N) +
-        -screened_rates(k_p_to_n)*Y(H1);
+        (screened_rates(k_n_to_p)*Y(N) + -screened_rates(k_p_to_n)*Y(H1)) +
+        0.5*screened_rates(k_C12_C12_to_p_Na23)*amrex::Math::powi<2>(Y(C12))*state.rho;
 
     ydot_nuc(He4) =
         0.5*screened_rates(k_C12_C12_to_He4_Ne20)*amrex::Math::powi<2>(Y(C12))*state.rho +
@@ -294,8 +290,8 @@ void rhs_nuc(const burn_t& state,
         (-screened_rates(k_Ne23_to_Na23)*Y(Ne23) + screened_rates(k_Na23_to_Ne23)*Y(Na23));
 
     ydot_nuc(Na23) =
-        0.5*screened_rates(k_C12_C12_to_p_Na23)*amrex::Math::powi<2>(Y(C12))*state.rho +
-        (screened_rates(k_Ne23_to_Na23)*Y(Ne23) + -screened_rates(k_Na23_to_Ne23)*Y(Na23));
+        (screened_rates(k_Ne23_to_Na23)*Y(Ne23) + -screened_rates(k_Na23_to_Ne23)*Y(Na23)) +
+        0.5*screened_rates(k_C12_C12_to_p_Na23)*amrex::Math::powi<2>(Y(C12))*state.rho;
 
     ydot_nuc(Mg23) =
         0.5*screened_rates(k_C12_C12_to_n_Mg23)*amrex::Math::powi<2>(Y(C12))*state.rho;

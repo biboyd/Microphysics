@@ -131,6 +131,7 @@ constexpr amrex::Real get_spin_state(const int inuc) {
 
     case N:
     case H1:
+    case C13:
     case N13:
         spin = 2;
         break;

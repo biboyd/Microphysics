@@ -30,7 +30,8 @@ def get_states(network):
 nuclei = ["p", 'he4', 'n',
           'c12', 'c13', 'c14',
           'n13', 'n14', #'n15',
-          'o16', 'o17', 'o18', #'o19', #'o20',
+          'o16', 'o17', 
+          'o18', #'o19', #'o20',
           'f18', #'f19', #'f20', 
           'f21', #'f22',
           'ne20', 'ne21', 'ne22', 'ne23',# 'ne24',
@@ -38,11 +39,9 @@ nuclei = ["p", 'he4', 'n',
           'na23', #'na24', 
           'na25',
           #'mg23', 
-          'mg24', 'mg25', #'mg26', 
-          'mg27', #'mg28',
+          'mg24', 'mg25', #'mg26', 'mg27', #'mg28',
           #'al25', 
-          #'al26', 
-           'al27', #'al28',
+          #'al26', 'al27', #'al28',
           #'si27', 'si28', 'si29', 'si30', 'si31', 'si32',
           #'p30', 'p31', 'p32'
          ]
@@ -80,21 +79,37 @@ all_lib.remove_rate(all_lib.get_rate_by_name("ne22(a,n)mg25"))
 
 # testing
 all_lib.remove_rate(all_lib.get_rate_by_name("o16(c12,a)mg24"))
-all_lib.remove_rate(all_lib.get_rate_by_name("o16(c12,p)al27"))
-all_lib.remove_rate(all_lib.get_rate_by_name("al27(e,)mg27"))
-all_lib.remove_rate(all_lib.get_rate_by_name("mg27(p,n)al27"))
+#all_lib.remove_rate(all_lib.get_rate_by_name("o16(c12,p)al27")) already removed
+#all_lib.remove_rate(all_lib.get_rate_by_name("al27(e,)mg27"))
+#all_lib.remove_rate(all_lib.get_rate_by_name("mg27(p,n)al27"))
 all_lib.remove_rate(all_lib.get_rate_by_name("na25(p,a)ne22"))
 all_lib.remove_rate(all_lib.get_rate_by_name("na25(p,n)mg25"))
+
+#quick test
+#all_lib.remove_rate(all_lib.get_rate_by_name("n13(e,)c13"))
+#all_lib.remove_rate(all_lib.get_rate_by_name("na23(e,)ne23"))
+#all_lib.remove_rate(all_lib.get_rate_by_name("ne23(,e)na23"))
 
 for r in unimportant_rates:
     all_lib.remove_rate(r)
 
 #all_lib.add_rate(tl.get_rate_by_name("mg27(,)al27"))
+#all_lib.add_rate(rl.get_rate_by_name("ne23(p,)na24"))
+#all_lib.add_rate(rl.get_rate_by_name("ne23(a,)mg27"))
+#all_lib.add_rate(rl.get_rate_by_name("ne23(n,)ne24"))
+#all_lib.add_rate(rl.get_rate_by_name("c12(c12,n)mg23"))
+#all_lib.add_rate(rl.get_rate_by_name("mg23(n,)mg24"))
 urca_large_net = pyna.AmrexAstroCxxNetwork(libraries=[all_lib])
 print(all_lib)
 print(f"Total Nuclei: {len(urca_large_net.unique_nuclei)}")
 print(f"Total Rates Included: {len(urca_large_net.rates)}")
 urca_large_net.write_network()
-urca_large_net.plot(outfile="urca_large.png", rotated=True)
+
+for i, (rho, T, comp) in enumerate(states):
+    urca_large_net.plot(outfile=f"urca_large_{i}.png", rho=rho, T=T, comp=comp,screen=chugunov_2009, 
+                    rotated=True, curved_edges=True, ydot_cutoff_value=1e-20)#, always_show_p=True, always_show_alpha=True)
+
+urca_large_net.plot(outfile="urca_large.png", #rho=rho, T=T, comp=comp,screen=chugunov_2009, 
+                    rotated=True, curved_edges=True)#, ydot_cutoff_value=1e-20, always_show_p=True, always_show_alpha=True)
 
 #print(urca_big_net)
